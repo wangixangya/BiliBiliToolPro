@@ -57,7 +57,7 @@ public class ListItemDto
     /// </summary>
     /// <sample>1：百人成就</sample>
     /// <sample>2：天选时刻、新星主播</sample>
-    public Dictionary<string, PendantInfo>? Pendant_info { get; set; }
+    public List<PendantInfo>? Pendant_info { get; set; }
 }
 
 public class PendantInfo

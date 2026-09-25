@@ -73,13 +73,13 @@ public interface ILiveApi
     Task<BiliApiResponse<GetArteaListResponse>> GetAreaList([Header("Cookie")] string ck);
 
     /// <summary>
-    /// 获取直播列表
+    /// 获取直播列表（room/v3/area/getRoomList，规避 second/getList -352 风控）
     /// </summary>
     /// <param name="request"></param>
     /// <param name="ck"></param>
     /// <returns></returns>
     [Headers("Referer: https://live.bilibili.com/", "Origin: https://live.bilibili.com")]
-    [Get("/xlive/web-interface/v1/second/getList")]
+    [Get("/room/v3/area/getRoomList")]
     Task<BiliApiResponse<GetListResponse>> GetList(
         [Query] GetListRequest request,
         [Header("Cookie")] string ck

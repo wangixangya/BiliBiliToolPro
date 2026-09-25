@@ -9,6 +9,7 @@ public class GetListRequest : IWrid
     public long area_id { get; set; }
     public string? sort_type { get; set; }
     public int page { get; set; }
+    public int page_size { get; set; } = 99;
     public long wts { get; set; }
     public string? w_rid { get; set; }
 }

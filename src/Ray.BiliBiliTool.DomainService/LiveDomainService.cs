@@ -166,8 +166,9 @@ public class LiveDomainService(
             logger.LogInformation("【扫描分区】{area}..." + Environment.NewLine, area.Name);
 
             string defaultSort = "";
-            //每个分区下搜索5页
-            for (int i = 1; i < 6; i++)
+            //自动分页，直到返回数 < page_size（room/v3/area/getRoomList 用 count 判断）
+            int page = 1;
+            while (true)
             {
                 var request = new GetListRequest
                 {
@@ -175,7 +176,8 @@ public class LiveDomainService(
                     parent_area_id = area.Id,
                     area_id = 0,
                     sort_type = defaultSort,
-                    page = i,
+                    page = page,
+                    page_size = 99,
                     wts = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                 };
                 BiliApiResponse<GetListResponse> listResponse = await liveApi.GetList(
@@ -189,7 +191,7 @@ public class LiveDomainService(
                         listResponse.Message,
                         listResponse.Code
                     );
-                    return;
+                    break;
                 }
 
                 var reData = listResponse.Data;
@@ -201,16 +203,18 @@ public class LiveDomainService(
                     var suc = item.Pendant_info.TryGetValue("2", out var pendant);
                     if (!suc)
                         continue;
-                    if (pendant?.Pendent_id != 504)
+                    if (pendant?.Pendent_id != 1432)  // 天选时刻 pendent_id（PR #1092 新标记）
                         continue;
                     count++;
 
                     await TryJoinTianXuan(item, ck);
                 }
 
-                if (reData.Has_more != 1)
+                //分页结束判断：返回数 < page_size 或已达到 count 总数
+                if (reData.List.Count < 99 || (reData.Count > 0 && page * 99 >= reData.Count))
                     break;
                 defaultSort = reData.New_tags.FirstOrDefault()?.Sort_type ?? "";
+                page++;
             }
 
             defaultSort = "";

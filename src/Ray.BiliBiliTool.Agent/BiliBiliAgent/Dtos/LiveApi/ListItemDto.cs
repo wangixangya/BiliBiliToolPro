@@ -6,6 +6,11 @@ public class GetListResponse
 
     public List<ListItemDto> List { get; set; } = [];
 
+    /// <summary>
+    /// 返回的直播间总数（room/v3/area/getRoomList 用 count 判断分页结束）
+    /// </summary>
+    public int Count { get; set; }
+
     public int Has_more { get; set; }
 }
 
@@ -60,7 +65,7 @@ public class PendantInfo
     /// <summary>
     /// Id
     /// </summary>
-    /// <sample>504：天选</sample>
+    /// <sample>1432：天选时刻</sample>
     /// <sample>426：百人成就</sample>
     /// <sample>397：新星主播</sample>
     public long Pendent_id { get; set; }

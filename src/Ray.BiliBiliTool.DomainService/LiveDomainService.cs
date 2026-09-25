@@ -200,10 +200,8 @@ public class LiveDomainService(
                 {
                     if (item.Pendant_info == null || item.Pendant_info.Count == 0)
                         continue;
-                    var suc = item.Pendant_info.TryGetValue("2", out var pendant);
-                    if (!suc)
-                        continue;
-                    if (pendant?.Pendent_id != 1432)  // 天选时刻 pendent_id（PR #1092 新标记）
+                    var pendant = item.Pendant_info.FirstOrDefault(p => p.Pendent_id == 1432);
+                    if (pendant == null)
                         continue;
                     count++;
 
